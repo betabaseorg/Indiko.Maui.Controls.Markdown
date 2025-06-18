@@ -427,7 +427,22 @@ public sealed class MarkdownView : ContentView
     private void RenderMarkdown(string markdown)
     {
         try
-        {
+        {    // Add two newlines before every Markdown image
+            markdown = Regex.Replace(
+                markdown,
+                @"(!\[[^\]]*\]\([^\)]*\))",
+                "\n\n$1"
+            );
+
+            // Add caption below image
+            // Match: ![alt text](url)
+            // Replace: ![alt text](url)\n\n*alt text*
+            markdown = Regex.Replace(
+                markdown,
+                @"!\[([^\]]*)\]\(([^\)]+)\)",
+                m => $"{m.Value}\n\n*{m.Groups[1].Value}*"
+            );
+
             var pipeline = new MarkdownPipelineBuilder()
                 .UseAdvancedExtensions()
                 .UseAlertBlocks()
