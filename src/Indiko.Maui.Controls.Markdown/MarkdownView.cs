@@ -1044,7 +1044,7 @@ public sealed class MarkdownView : ContentView
                         break;
 
                     case EmphasisInline em:
-                        var text = string.Concat(em.Select(x => (x as LiteralInline)?.Content.ToString()));
+                        var text = string.Concat(em.Descendants<LiteralInline>().Select(i => i.Content.ToString()));
                         formatted.Spans.Add(new Span
                         {
                             Text = text,
@@ -1055,7 +1055,9 @@ public sealed class MarkdownView : ContentView
                                 ? FontAttributes.Bold
                                 : em.DelimiterChar == '*' && em.DelimiterCount == 1
                                     ? FontAttributes.Italic
-                                    : FontAttributes.None,
+                                    : em.DelimiterChar == '*' && em.DelimiterCount == 3
+                                        ? FontAttributes.Bold | FontAttributes.Italic
+                                        : FontAttributes.None,
                             FontFamily = TextFontFace,
                             FontSize = TextFontSize,
                             TextColor = TextColor
