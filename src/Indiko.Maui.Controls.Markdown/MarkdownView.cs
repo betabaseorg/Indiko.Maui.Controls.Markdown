@@ -439,7 +439,7 @@ public sealed class MarkdownView : ContentView
             // Replace: ![alt text](url)\n\n*alt text*
             markdown = Regex.Replace(
                 markdown,
-                @"!\[([^\]]*)\]\(([^\)]+)\)",
+                @"!\[([^\]]+)\]\(([^\)]+)\)",
                 m => $"{m.Value}\n\n*{m.Groups[1].Value}*"
             );
 
